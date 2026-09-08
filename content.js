@@ -422,10 +422,6 @@ let collectMeta=async (currentPage) => {
 let collectBandcampMeta=() =>{
     const creditsBlock=document.getElementsByClassName("tralbumData tralbum-credits")[0];
     const creditsText=__normalizeMultiline(creditsBlock ? (creditsBlock.innerText || creditsBlock.textContent) : '');
-    const creditsLines=(creditsText || '').split('\n');
-    if (creditsLines.length && /^released\s+/i.test(creditsLines[0])) creditsLines.shift();
-    const productionStart=creditsLines.findIndex((line)=>/^Produit et réalisé par\b/i.test(line.trim()));
-    const creditsDescription=__normalizeMultiline((productionStart>=0 ? creditsLines.slice(productionStart) : creditsLines).join('\n'));
 
     const aboutBlock=document.getElementsByClassName("tralbumData tralbum-about")[0];
     const aboutText=__normalizeMultiline(aboutBlock ? (aboutBlock.innerText || aboutBlock.textContent) : '');
@@ -433,8 +429,8 @@ let collectBandcampMeta=() =>{
     const aboutLinkText=__normalizeMultiline(aboutLink ? (aboutLink.innerText || aboutLink.textContent) : '');
     const aboutIsOnlyLink=Boolean(aboutText && aboutLinkText===aboutText);
     const description=(aboutText && !aboutIsOnlyLink)
-        ? __normalizeMultiline(creditsText ? `${aboutText}\n\n### credits\n\n${creditsText}` : aboutText)
-        : creditsDescription;
+        ? __normalizeMultiline(creditsText ? `${aboutText}\n\n${creditsText}` : aboutText)
+        : creditsText;
 
     const trackRows=Array.from(document.getElementById('track_table').children[0].getElementsByClassName("track_row_view"));
     const tracks=trackRows.map((ele,index) =>{
