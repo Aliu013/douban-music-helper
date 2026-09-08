@@ -425,7 +425,16 @@ let collectBandcampMeta=() =>{
     const creditsLines=(creditsText || '').split('\n');
     if (creditsLines.length && /^released\s+/i.test(creditsLines[0])) creditsLines.shift();
     const productionStart=creditsLines.findIndex((line)=>/^Produit et réalisé par\b/i.test(line.trim()));
-    const description=__normalizeMultiline((productionStart>=0 ? creditsLines.slice(productionStart) : creditsLines).join('\n'));
+    const creditsDescription=__normalizeMultiline((productionStart>=0 ? creditsLines.slice(productionStart) : creditsLines).join('\n'));
+
+    const aboutBlock=document.getElementsByClassName("tralbumData tralbum-about")[0];
+    const aboutText=__normalizeMultiline(aboutBlock ? (aboutBlock.innerText || aboutBlock.textContent) : '');
+    const aboutLink=aboutBlock ? aboutBlock.querySelector('a') : null;
+    const aboutLinkText=__normalizeMultiline(aboutLink ? (aboutLink.innerText || aboutLink.textContent) : '');
+    const aboutIsOnlyLink=Boolean(aboutText && aboutLinkText===aboutText);
+    const description=(aboutText && !aboutIsOnlyLink)
+        ? __normalizeMultiline(creditsText ? `${aboutText}\n\n### credits\n\n${creditsText}` : aboutText)
+        : creditsDescription;
 
     const trackRows=Array.from(document.getElementById('track_table').children[0].getElementsByClassName("track_row_view"));
     const tracks=trackRows.map((ele,index) =>{
