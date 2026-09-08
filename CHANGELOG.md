@@ -6,6 +6,8 @@
 
 ### Fixed
 - 将 Bandcamp 的默认音乐风格从 `Electronic` 调整为 `Rock`。
+- Bandcamp 曲目列表只采集标题，不再混入每首歌的播放时长。
+- Bandcamp Description 改为提取 credits 中的制作与授权信息，并排除发布日期。
 
 ## [1.0.0] - 2026-09-08
 

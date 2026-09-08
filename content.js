@@ -420,6 +420,30 @@ let collectMeta=async (currentPage) => {
 }
 
 let collectBandcampMeta=() =>{
+    const creditsBlock=document.getElementsByClassName("tralbumData tralbum-credits")[0];
+    const creditsText=__normalizeMultiline(creditsBlock ? (creditsBlock.innerText || creditsBlock.textContent) : '');
+    const creditsLines=(creditsText || '').split('\n');
+    if (creditsLines.length && /^released\s+/i.test(creditsLines[0])) creditsLines.shift();
+    const productionStart=creditsLines.findIndex((line)=>/^Produit et réalisé par\b/i.test(line.trim()));
+    const description=__normalizeMultiline((productionStart>=0 ? creditsLines.slice(productionStart) : creditsLines).join('\n'));
+
+    const trackRows=Array.from(document.getElementById('track_table').children[0].getElementsByClassName("track_row_view"));
+    const tracks=trackRows.map((ele,index) =>{
+        const titleElement=ele.querySelector('.track-title');
+        let title=titleElement ? titleElement.textContent.trim() : '';
+        if (!title){
+            title=ele.textContent
+                .replace(/[\n\t ]+/g,' ')
+                .replace(/\b\d{1,2}:\d{2}(?::\d{2})?\b/g,'')
+                .replace(/ *buy track */,'')
+                .replace(/ *lyrics */,'')
+                .replace(/ *video */,'')
+                .replace(/^\s*\d+\s*[.\-]?\s*/,'')
+                .trim();
+        }
+        return title ? `${index+1} - ${title}` : null;
+    }).filter(Boolean).join('\n');
+
     let out= {
         'url'           : document.URL,
         'album'         : document.getElementById('name-section').children[0].textContent.trim(),
@@ -429,20 +453,15 @@ let collectBandcampMeta=() =>{
         'genre'         : 'Rock',
         'releaseType'   : 'Album', // Not labeled on Bandcamp
         'media'         : 'Digital', // Not labeled on Bandcamp
-        'date'          : document.getElementsByClassName("tralbumData tralbum-credits")[0].textContent.trim().split('\n')[0].replace('released ',''),
+        'date'          : (creditsText || '').split('\n')[0].replace(/^released\s+/i,''),
         'label'         : "Self-Released", // Bandcamp doesn't have a generic way for label
         'numberOfDiscs' : "1",
         'isrc'          : null,
-        'tracks'        : Array.from(document.getElementById('track_table').children[0].getElementsByClassName("track_row_view")).map((ele) =>{
-                            return ele.textContent.replaceAll(/[\n\t ]+/g,' ').replace(/ *buy track */,'').replace(/ *lyrics */,'').replace(/ *video */,'').trim()
-                        }).join('\n').trim(), 
-        'description'   : document.URL,
+        'tracks'        : tracks,
+        'description'   : description,
         'imgUrl'        : document.getElementById('tralbumArt').children[0].href
     }
     out['date']=formatDate(out['date']);
-    try{
-        out['description']+="\n\n"+document.getElementsByClassName("tralbumData tralbum-about")[0].textContent.trim()
-    } catch (err){}
     return out;
 }
 
