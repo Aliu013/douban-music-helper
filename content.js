@@ -426,7 +426,7 @@ let collectBandcampMeta=() =>{
         'barcode'       : null,
         'albumAltName'  : null,
         'artists'       : [document.getElementById('name-section').children[1].getElementsByTagName('span')[0].textContent.trim()],
-        'genre'         : 'Electronic',
+        'genre'         : 'Rock',
         'releaseType'   : 'Album', // Not labeled on Bandcamp
         'media'         : 'Digital', // Not labeled on Bandcamp
         'date'          : document.getElementsByClassName("tralbumData tralbum-credits")[0].textContent.trim().split('\n')[0].replace('released ',''),
