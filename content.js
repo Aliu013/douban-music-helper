@@ -315,7 +315,7 @@ let fillDouban3=(meta,click=false) =>{ // TODO: auto-select image
 let createButton = (currentPage) => {
     const button = document.createElement("button");
     button.innerHTML = "Collect";
-    button.style = "top:0;left:0;position:absolute;z-index:9999";
+    button.style = `top:0;left:0;position:${currentPage==='bandcamp' ? 'fixed' : 'absolute'};z-index:9999`;
 
     button.onclick = async function () {
         const oldText = button.textContent;

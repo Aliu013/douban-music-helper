@@ -8,6 +8,7 @@
 - 将 Bandcamp 的默认音乐风格从 `Electronic` 调整为 `Rock`。
 - Bandcamp 曲目列表只采集标题，不再混入每首歌的播放时长。
 - Bandcamp Description 在存在有效 about 时直接拼接完整 credits；仅含链接的 about 则忽略链接并保留完整 credits。
+- Bandcamp 的 Collect 按钮固定在视口左上角，滚动页面后仍然可见。
 
 ## [1.0.0] - 2026-09-08
 
