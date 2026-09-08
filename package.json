@@ -1,0 +1,35 @@
+{
+  "name": "douban-music-helper",
+  "version": "1.0.0",
+  "description": "A Chrome extension for assisting Douban Music entry creation from multiple music sources.",
+  "main": "background.js",
+  "dependencies": {
+    "webextension-polyfill": "^0.7.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aliu013/douban-music-helper.git"
+  },
+  "keywords": [
+    "douban",
+    "music",
+    "chrome-extension",
+    "netease-cloud-music",
+    "bandcamp",
+    "discogs",
+    "apple-music"
+  ],
+  "author": "Zeqian Li",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Aliu013/douban-music-helper/issues"
+  },
+  "homepage": "https://github.com/Aliu013/douban-music-helper#readme",
+  "contributors": [
+    "Aliu013"
+  ]
+}

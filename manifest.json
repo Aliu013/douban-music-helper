@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "Douban Music Helper",
+  "version": "1.0.0",
+  "description": "豆瓣音乐条目添加助手，支持网易云音乐、Bandcamp、Discogs、Apple Music 等来源。",
+  "icons": {
+    "49": "icons/icon-49.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://music.douban.com/new_subject*",
+        "*://*.bandcamp.com/*",
+        "*://www.discogs.com/*master*",
+        "*://www.discogs.com/*release*",
+        "*://music.apple.com/*/album/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    },
+    {
+      "matches": [
+        "*://music.163.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "all_frames": true,
+      "match_about_blank": true,
+      "match_origin_as_fallback": true
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "downloads",
+    "tabs",
+    "storage"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "host_permissions": [
+    "*://*.music.126.net/*",
+    "*://*.music.163.com/*",
+    "*://music.163.com/*",
+    "*://*.bandcamp.com/*",
+    "*://www.discogs.com/*",
+    "*://music.apple.com/*",
+    "https://music.douban.com/*"
+  ]
+}
