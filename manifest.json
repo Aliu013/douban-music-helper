@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Douban Music Helper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "豆瓣音乐条目添加助手，支持网易云音乐、Bandcamp、Discogs、Apple Music 等来源。",
   "icons": {
     "49": "icons/icon-49.png"
