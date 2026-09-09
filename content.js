@@ -619,7 +619,6 @@ const __collectCloudMusicMetaFromDocument = (doc, sourceUrl=document.URL) => {
     out['url'] = sourceUrl;
     out['releaseType'] = 'Album';
     out['media'] = 'Digital';
-    out['numberOfDiscs'] = '1';
 
     const albumEl = doc.querySelector("h2.f-ff2, .m-info .tit h2, .cnt .hd h2, h2");
     if (albumEl) out['album'] = albumEl.textContent.trim();
