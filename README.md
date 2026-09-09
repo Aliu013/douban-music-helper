@@ -33,6 +33,12 @@
 - 表演者超过三位时自动增加字段并填写全部表演者。
 - 不再默认填写碟片数为 1。
 
+### v1.0.1
+
+- 修正 Bandcamp 默认音乐风格与曲目标题采集。
+- 改进 Bandcamp Description 的 about 与 credits 组合规则。
+- Bandcamp 的 Collect 按钮在滚动页面时保持可见。
+
 ## 版本管理
 
 从 **v1.0.0** 开始，本项目正式使用 Git/GitHub 维护版本历史。
