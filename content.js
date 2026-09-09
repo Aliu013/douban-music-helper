@@ -209,6 +209,36 @@ let fillDouban1=(meta, click=false) =>{
     if (click) button.click();  //TODO: 保留，为了看log暂时注释
 }
 
+const __fillDoubanArtists = (artists) => {
+    const musicianItem = document.querySelector('.item.list.musicians');
+    if (!musicianItem || !Array.isArray(artists)) return;
+
+    const artistNames = artists.map(artist => String(artist || '').trim()).filter(Boolean);
+    if (!artistNames.length) return;
+
+    const getInputs = () => Array.from(musicianItem.querySelectorAll('.input_basic'));
+
+    // 豆瓣初始只显示三个表演者输入框。需要更多时，点击该项的“+”让页面生成新输入框。
+    while (getInputs().length < artistNames.length) {
+        const addButton = Array.from(musicianItem.querySelectorAll('a, button, [role="button"]'))
+            .find(element => element.textContent.trim() === '+');
+        const inputCount = getInputs().length;
+        if (!addButton) {
+            console.warn('Douban-Music-Helper: cannot add another performer field.');
+            break;
+        }
+        addButton.click();
+        if (getInputs().length === inputCount) {
+            console.warn('Douban-Music-Helper: performer field was not added after clicking "+".');
+            break;
+        }
+    }
+
+    getInputs().slice(0, artistNames.length).forEach((input, index) => {
+        input.value = artistNames[index];
+    });
+};
+
 // douban listing page 2
 // 添加条目页面，填充字段到页面信息
 let fillDouban2=(meta,click=false) =>{
@@ -217,13 +247,9 @@ let fillDouban2=(meta,click=false) =>{
     document.getElementsByClassName('item basic')[2].getElementsByClassName('input_basic')[0].value=meta['label'];
     document.getElementsByClassName('item basic')[3].getElementsByClassName('input_basic')[0].value=meta['numberOfDiscs'];
     document.getElementsByClassName('item basic')[4].getElementsByClassName('input_basic')[0].value=meta['isrc'];
-    document.getElementsByClassName('item list')[0].getElementsByClassName('input_basic')[0].value=meta['albumAltName'];
+    document.getElementsByClassName('item list')[0].getElementsByClassName('input_basic')[0].value=meta['albumAltName'] || '';
 
-    if (meta['artists']){  //TODO: more than 3 artists
-        for (let i=0;i<Math.min(3,meta['artists'].length);i++){
-            document.getElementsByClassName('item list musicians')[0].getElementsByClassName('input_basic')[i].value=meta['artists'][i];
-        }
-    }
+    __fillDoubanArtists(meta['artists']);
     // items= // TODO
     fillDropdown(document.getElementsByClassName('dropdown')[0], // preserved
         __withDefaultOption(meta['genre'], {
@@ -593,10 +619,16 @@ const __collectCloudMusicMetaFromDocument = (doc, sourceUrl=document.URL) => {
     out['url'] = sourceUrl;
     out['releaseType'] = 'Album';
     out['media'] = 'Digital';
-    out['numberOfDiscs'] = '1';
 
     const albumEl = doc.querySelector("h2.f-ff2, .m-info .tit h2, .cnt .hd h2, h2");
     if (albumEl) out['album'] = albumEl.textContent.trim();
+
+    // 网易云将专辑副标题放在专辑名下方的 .subtit 元素中；豆瓣可将其作为“又名”。
+    const albumAltNameEl = doc.querySelector('.m-info .tit .subtit, .cnt .hd .subtit, .tit .subtit, .subtit.f-fs1.f-ff2');
+    if (albumAltNameEl) {
+        const albumAltName = (albumAltNameEl.textContent || '').replace(/\s+/g, ' ').trim();
+        if (albumAltName) out['albumAltName'] = albumAltName;
+    }
 
     const infoLines = Array.from(doc.querySelectorAll('.m-info p.intr, .cnt p.intr, p.intr'));
     const artistLine = infoLines.find(el => /^\s*(歌手|艺术家|Artist)\s*[：:]/i.test(el.textContent || '')) || infoLines[0];
