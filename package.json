@@ -1,6 +1,6 @@
 {
   "name": "douban-music-helper",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A Chrome extension for assisting Douban Music entry creation from multiple music sources.",
   "main": "background.js",
   "dependencies": {

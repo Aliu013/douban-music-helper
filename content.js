@@ -239,6 +239,15 @@ const __fillDoubanArtists = (artists) => {
     });
 };
 
+// 根据已采集的曲目数决定豆瓣的专辑类型；曲目缺失时由调用方保留来源值。
+let __releaseTypeFromTracks=(tracks)=>{
+    const trackCount=String(tracks || '').split(/\r?\n/).filter(line => line.trim()).length;
+    if (trackCount===1) return 'Single';
+    if (trackCount>=2 && trackCount<=4) return 'EP';
+    if (trackCount>=5) return 'Album';
+    return null;
+};
+
 // douban listing page 2
 // 添加条目页面，填充字段到页面信息
 let fillDouban2=(meta,click=false) =>{
@@ -286,8 +295,9 @@ let fillDouban2=(meta,click=false) =>{
                     'World': 13
                 
         });
+    const releaseType=__releaseTypeFromTracks(meta['tracks']) || meta['releaseType'];
     fillDropdown(document.getElementsByClassName('dropdown')[1], // preserved
-        __withDefaultOption(meta['releaseType'], {
+        __withDefaultOption(releaseType, {
 'Album': 0, 
                     'Compilation': 1,
                     'EP': 2, 
